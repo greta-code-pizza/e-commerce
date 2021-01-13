@@ -1,4 +1,4 @@
-const DESCRIPTION_SIZE = 30;
+const DESCRIPTION_SIZE = 100;
 
 export default class Product {
   public label: string;

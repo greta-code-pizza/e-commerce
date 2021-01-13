@@ -29,7 +29,7 @@ export default class Cart {
       t += this.products[i].roundedPrice();
     }
     
-    if(this.owner.prime) {
+    if(this.hasReduction()) {
       return Math.round((t * 0.8)*100) / 100;
     } else {
       return t;

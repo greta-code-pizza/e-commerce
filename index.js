@@ -13,14 +13,24 @@ import User from "./src/User";
 let john = new User("John", "Doe");
 let cart = new Cart(john);
 
+
 let root = document.getElementById("root");
 let userBar = document.getElementById("user");
 
 function topUser(user) {
-  userBar.innerHTML = `${user.fullName()} ${user.prime ? '<button class="prime">Premium</button>' : '<button id="primify">Devenir premium</button>'}`;
+  if(user.prime) {
+    userBar.innerHTML = `${user.fullName()} <button class="prime">Premium</button>`;
+  } else {
+    userBar.innerHTML = `${user.fullName()} <button id="primify">Devenir premium</button>`;
+  }
 }
 
 topUser(john);
+
+function displayCart(nb, val) {
+  let cart = document.getElementById("cart");
+  cart.innerText = `${nb} article${nb > 1 ? 's' : ''} d'une valeur de ${val} €`;
+}
 
 document.getElementById('primify').addEventListener('click', () => {
   john.prime = true;
@@ -28,11 +38,8 @@ document.getElementById('primify').addEventListener('click', () => {
   displayCart(cart.count(), cart.total())
 });
 
-function displayCart(nb, val) {
-  let cart = document.getElementById("cart");
-  cart.innerText = `${nb} article${nb > 1 ? 's' : ''} d'une valeur de ${val} €`;
-}
 
+// Affichage dans le root
 apiProducts.forEach(apiP => {
   let product = new Product(apiP.label, apiP.barCode, apiP.price, apiP.description, apiP.image);
 
@@ -52,9 +59,10 @@ apiProducts.forEach(apiP => {
   paragraph.innerText = product.shortDescription();
 
   btn.innerText = 'Ajouter au panier'
+
+
   btn.onclick = () => {
     cart.add(product);
-    console.log(cart.count())
     displayCart(cart.count(), cart.total())
   }
 
