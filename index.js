@@ -9,13 +9,44 @@ import Cart from "./src/Cart";
 import Product from "./src/Product";
 import User from "./src/User";
 
+
 // On simule le fait d'être connecté en tant qu'utilisateur
 let john = new User("John", "Doe");
 let cart = new Cart(john);
 
-
 let root = document.getElementById("root");
+let btns = document.getElementById("btns");
 let userBar = document.getElementById("user");
+
+let productList = Product.all(apiProducts);
+
+let btnAll = document.createElement('button');
+let btnCheese = document.createElement('button');
+let btnPasta = document.createElement('button');
+
+btnAll.innerText = "Tous les aliments";
+btnCheese.innerText = "Fromage";
+btnPasta.innerText = "Pâtes";
+
+btnAll.onclick = () => {
+  productList = Product.all(apiProducts);
+  showList(productList)
+}
+
+btnCheese.onclick = () => {
+  productList = Product.filter(Product.all(apiProducts), "fromage");
+  showList(productList)
+}
+
+btnPasta.onclick = () => {
+  productList = Product.filter(Product.all(apiProducts), "pâtes");
+  showList(productList)
+}
+
+btns.appendChild(btnAll);
+btns.appendChild(btnCheese);
+btns.appendChild(btnPasta);
+
 
 function topUser(user) {
   if(user.prime) {
@@ -38,41 +69,42 @@ document.getElementById('primify').addEventListener('click', () => {
   displayCart(cart.count(), cart.total())
 });
 
+function showList(productList) {
+  root.innerHTML = "";
+  // Affichage dans le root
+  productList.forEach(product => {
+    let card = document.createElement('div');
+    let paragraph = document.createElement('p');
+    let title = document.createElement('h2');
+    let img = document.createElement('img');
+    let btn = document.createElement('button');
 
-// Affichage dans le root
-apiProducts.forEach(apiP => {
-  let product = new Product(apiP.label, apiP.barCode, apiP.price, apiP.description, apiP.image);
+    card.classList.add('card');
 
-  let card = document.createElement('div');
-  let paragraph = document.createElement('p');
-  let title = document.createElement('h2');
-  let img = document.createElement('img');
-  let btn = document.createElement('button');
+    title.innerText = product.label;
+    
+    img.src = product.image;
 
-  card.classList.add('card');
+    paragraph.classList.add('content');
+    paragraph.innerText = product.shortDescription();
 
-  title.innerText = product.label;
-  
-  img.src = product.image;
-
-  paragraph.classList.add('content');
-  paragraph.innerText = product.shortDescription();
-
-  btn.innerText = 'Ajouter au panier'
+    btn.innerText = 'Ajouter au panier'
 
 
-  btn.onclick = () => {
-    cart.add(product);
-    displayCart(cart.count(), cart.total())
-  }
+    btn.onclick = () => {
+      cart.add(product);
+      displayCart(cart.count(), cart.total())
+    }
 
-  card.appendChild(title);
-  card.appendChild(img);
-  card.appendChild(paragraph);
-  card.appendChild(btn);
-  root.appendChild(card);
-});
+    card.appendChild(title);
+    card.appendChild(img);
+    card.appendChild(paragraph);
+    card.appendChild(btn);
+    root.appendChild(card);
+  });
+}
 
+showList(productList)
 
 
 

@@ -10,6 +10,18 @@ export default class Cart {
     this.products = [];
   }
 
+  filter(type: string) {
+    let p = [];
+
+    for(let i=0; i < this.products.length; i++) {
+      if(this.products[i].type == type) {
+        p.push(this.products[i]);
+      }
+    }
+
+    return p;
+  }
+
   add(product: Product) {
     this.products.push(product);
   }
